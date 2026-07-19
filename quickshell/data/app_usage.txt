@@ -1,0 +1,25 @@
+{
+    "usageList": {
+        "Bluetooth": 3,
+        "Crystal Launcher": 11,
+        "Discord": 10,
+        "Endeavour": 1,
+        "Firefox": 6,
+        "Heroic Games Launcher": 2,
+        "Highlight": 28,
+        "Miny": 2,
+        "Neovide": 149,
+        "OBS Studio": 2,
+        "Podgląd profilu kolorów": 1,
+        "Sons Of The Forest": 1,
+        "Spotify": 12,
+        "Steam": 12,
+        "Sterowanie głośnością": 1,
+        "Vim": 1,
+        "Wykorzystanie dysku": 1,
+        "btop++": 9,
+        "kitty": 2,
+        "nvtop": 23,
+        "undefined": 5
+    }
+}
