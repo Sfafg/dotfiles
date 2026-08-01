@@ -1,6 +1,5 @@
 local terminal = "kitty"
-local fileManager = "dolphin"
--- local menu = "tofi-drun -c ~/.config/tofi/configA --drun-launch=true"
+local fileManager = "thunar"
 local browser = "firefox"
 local screen_grab = "grimblast --notify copysave area"
 local clipboard = "cliphist list | tofi -c ~/.config/tofi/configV | cliphist decode | wl-copy"
@@ -29,7 +28,6 @@ hl.bind(mainMod .. " + Q", hl.dsp.exec_cmd(statusBar))
 --- Windows controls ---
 hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen({ action = "toggle" }))
-
 hl.bind(mainMod .. " + TAB", function()
 	local workspace = hl.get_active_special_workspace() or hl.get_active_workspace()
 	if not workspace then
