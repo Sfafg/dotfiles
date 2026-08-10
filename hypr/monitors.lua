@@ -1,5 +1,6 @@
 hl.monitor({
 	transform = 0,
+	disabled = false,
 	output = "DP-1",
 	scale = 1,
 	mode = "3440x1440@120Hz",
