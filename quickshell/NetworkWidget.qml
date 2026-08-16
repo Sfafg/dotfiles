@@ -37,8 +37,11 @@ ColumnLayout {
                 view.focus = true;
                 break;
             case Navigation.child:
-                view.visible = !view.visible;
+                if (!Wifi.isOn || Wifi.availableNetworks.length == 0)
+                    return ;
+
                 view.focus = view.visible;
+                view.visible = !view.visible;
                 break;
             default:
                 return ;
@@ -50,6 +53,11 @@ ColumnLayout {
     ItemList {
         id: view
 
+        onFocusChanged: {
+            if (!focus)
+                visible = false;
+
+        }
         visible: false
         model: Wifi.availableNetworks
         maxShownItemCount: 3

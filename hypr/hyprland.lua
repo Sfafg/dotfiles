@@ -16,6 +16,7 @@ hl.config({
 		no_focus_fallback = true,
 
 		border_size = 1,
+		extend_border_grab_area = 305,
 		col = {
 			active_border = {
 				colors = {

@@ -33,7 +33,9 @@ ColumnLayout{
 
     ColumnLayout{
         id: view
+
         visible: false
+
         Rectangle{
             id: sinksTitle
             height: 25
@@ -68,7 +70,7 @@ ColumnLayout{
         ItemList{
             id: sinksList
             model: Pipewire.nodes.values.filter(n=>n.isSink && n.audio && n.description.length > 0)
-            maxShownItemCount: 2
+            maxShownItemCount: 3
             itemHeight: 30
 
             Keys.onPressed: (event) => {
@@ -146,7 +148,7 @@ ColumnLayout{
             id: sourcesList
             visible: true
             model: Pipewire.nodes.values.filter(n=>!n.isSink && n.audio)
-            maxShownItemCount: 2
+            maxShownItemCount: 3
             itemHeight: 30
 
             Keys.onPressed: (event) => {

@@ -20,15 +20,6 @@ hl.window_rule({
 })
 
 hl.window_rule({
-	name = "no_focus",
-	match = {
-		class = "Highlights",
-	},
-
-	-- no_focus = true,
-})
-
-hl.window_rule({
 	name = "move-hyprland-run",
 	match = { class = "hyprland-run" },
 
@@ -44,8 +35,21 @@ hl.window_rule({
 hl.workspace_rule({
 	workspace = "1",
 	layout = "master",
+	monitor = "DP-1",
+	default = true,
 })
+
 hl.workspace_rule({
 	workspace = "2",
 	layout = "scrolling",
+	monitor = "HDMI-A-2",
+	default = true,
 })
+
+for i = 3, 10 do
+	if i % 2 == 0 then
+		hl.workspace_rule({ workspace = tostring(i), monitor = "HDMI-A-2" })
+	else
+		hl.workspace_rule({ workspace = tostring(i), monitor = "DP-1" })
+	end
+end

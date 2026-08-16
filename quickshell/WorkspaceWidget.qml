@@ -57,7 +57,20 @@ Rectangle {
                         font.family: Fnt.fontFamily
                         font.pixelSize: Fnt.fontSize2
                     }
-
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked:{ 
+                            if (activeSpecial) {
+                                Hyprland.dispatch(
+                                    "hl.dsp.workspace.toggle_special("+activeSpecial.slice(8)+")"
+                                )
+                                Hyprland.dispatch(
+                                    "hl.dsp.workspace.toggle_special("+activeSpecial.slice(8)+")"
+                                )
+                            }
+                            modelData.activate()
+                        }
+                    }
                 }
 
 
@@ -78,12 +91,16 @@ Rectangle {
                         text: specialWorkspace ? "s" : ""
                         color: Theme.text
                     }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            modelData.activate();
+                            if (specialWorkspace) specialWorkspace.activate()
+                        }
+                    }
                 }
 
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: modelData.activate()
-                }
             }
         }
     }

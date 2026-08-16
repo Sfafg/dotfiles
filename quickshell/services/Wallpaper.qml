@@ -6,20 +6,14 @@ pragma Singleton
 Singleton {
     id: root
 
-    function getWallpaper() {
-        let hour = new Date().getHours();
-        if (hour >= 6 && hour < 12)
-            return "morning";
-        else if (hour >= 12 && hour < 18)
-            return "noon";
-        else if (hour >= 18 && hour < 22)
-            return "evening";
-        else
-            return "night";
-    }
+    property string currentWallpaper
 
-    Component.onCompleted: {
-        changeWallpaper.change(getWallpaper());
+    Connections {
+        function onThemeChanged() {
+            changeWallpaper.change(ThemePicker.theme);
+        }
+
+        target: ThemePicker
     }
 
     Process {
@@ -31,20 +25,12 @@ Singleton {
             if (name === currentWallpaper)
                 return ;
 
+            console.log(`/home/slawek/.config/hypr/assets/backgrounds/wallpaper_${name}.jpg`);
             currentWallpaper = name;
             command = ["awww", "img", `/home/slawek/.config/hypr/assets/backgrounds/wallpaper_${name}.jpg`, "--transition-fps", "255", "--transition-type", "outer", "--transition-duration", "0.8"];
             running = true;
         }
 
-    }
-
-    Timer {
-        interval: 1000
-        running: true
-        repeat: true
-        onTriggered: {
-            changeWallpaper.change(root.getWallpaper());
-        }
     }
 
 }

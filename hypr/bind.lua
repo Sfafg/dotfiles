@@ -81,9 +81,17 @@ hl.bind(mainMod .. " + S", function()
 	local id = hl.get_active_workspace().name
 	hl.dispatch(hl.dsp.workspace.toggle_special("magic" .. id))
 end)
+
 for i = 1, 10 do
 	local key = i % 10
-	hl.bind(mainMod .. " + " .. key, hl.dsp.focus({ workspace = i }))
+	hl.bind(mainMod .. " + " .. key, function()
+		local special_workspace = hl.get_active_special_workspace()
+		if special_workspace then
+			hl.dispatch(hl.dsp.workspace.toggle_special(special_workspace))
+			hl.dispatch(hl.dsp.workspace.toggle_special("magic" .. i))
+		end
+		hl.dispatch(hl.dsp.focus({ workspace = i }))
+	end)
 	hl.bind(mainMod .. " + SHIFT + " .. key, hl.dsp.window.move({ workspace = i }))
 end
 

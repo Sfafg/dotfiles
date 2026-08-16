@@ -15,7 +15,7 @@ Scope {
 
     Item {
         Component.onCompleted: {
-            console.log(Wallpaper.getWallpaper());
+            console.log(Wallpaper.currentWallpaper);
         }
     }
 

@@ -44,6 +44,13 @@ Widget{
 
 ItemList{
     id: view
+
+    onFocusChanged: {
+        if (!focus)
+            visible = false;
+
+    }
+
     visible: false
     model: ScriptModel {
         values: [...Bluetooth.devices.values]
