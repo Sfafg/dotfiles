@@ -15,7 +15,7 @@
         "Kalkulator": 23,
         "Konsola": 1,
         "Miny": 2,
-        "Neovide": 391,
+        "Neovide": 393,
         "Neovim": 1,
         "OBS Studio": 14,
         "Pinta": 9,

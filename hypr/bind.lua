@@ -66,7 +66,12 @@ hl.bind(mainMod .. " + CONTROL + j", hl.dsp.window.move({ x = 0, y = 20, relativ
 -- hl.bind(mainMod .. " + SHIFT + S", hl.dsp.window.move({ workspace = "special:magic" }))
 hl.bind(mainMod .. " + SHIFT + S", function()
 	local id = hl.get_active_workspace().name
-	hl.dispatch(hl.dsp.window.move({ workspace = "special:magic" .. id }))
+	local special_workspace = hl.get_active_special_workspace()
+	if special_workspace then
+		hl.dispatch(hl.dsp.window.move({ workspace = id }))
+	else
+		hl.dispatch(hl.dsp.window.move({ workspace = "special:magic" .. id }))
+	end
 end)
 
 --- Mouse navigation ---

@@ -4,12 +4,6 @@ import Quickshell
 pragma Singleton
 
 Singleton {
-    // Connections {
-    //     function onThemeChanged() {
-    //     }
-    //     target: ThemePicker
-    // }
-
     property color selectedBorder: Qt.rgba(1, 1, 1, 1)
     property int selectedBorderWidth: 2
     property color background: Qt.hsva(0, 0, 0, 0.7)
@@ -32,7 +26,6 @@ Singleton {
             return Qt.hsva(0.63, 0.5, 0.7, 1);
 
     }
-    // Qt.hsva(0.37, 0.55, 0.98, 1)
     property color accent1: Qt.hsva(accent.hsvHue, accent.hsvSaturation - 0.04, accent.hsvValue - 0.18, 1)
     property color accent2: Qt.hsva(accent.hsvHue, accent.hsvSaturation - 0.33, accent.hsvValue - 0.52, 1)
     property color text: Qt.hsva(0, 0, 1, 1)
