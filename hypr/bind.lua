@@ -36,10 +36,23 @@ hl.bind(mainMod .. " + TAB", function()
 	local layout = workspace.tiled_layout
 	if layout == "master" then
 		hl.dispatch(hl.dsp.layout("swapwithmaster"))
-	elseif layout == "diwndle" then
-		hl.dispatch(hl.dsp.layout("togglesplit"))
+	elseif layout == "dwindle" then
+		hl.dispatch(hl.dsp.layout("swapsplit"))
 	elseif layout == "scrolling" then
 		hl.dispatch(hl.dsp.layout("consume_or_expel prev"))
+	end
+end)
+
+hl.bind(mainMod .. " + SHIFT + TAB", function()
+	local workspace = hl.get_active_special_workspace() or hl.get_active_workspace()
+	if not workspace then
+		return
+	end
+	local layout = workspace.tiled_layout
+	if layout == "scrolling" then
+		hl.dispatch(hl.dsp.layout("consume_or_expel next"))
+	elseif layout == "dwindle" then
+		hl.dispatch(hl.dsp.layout("togglesplit"))
 	end
 end)
 
@@ -90,12 +103,14 @@ end)
 for i = 1, 10 do
 	local key = i % 10
 	hl.bind(mainMod .. " + " .. key, function()
-		local special_workspace = hl.get_active_special_workspace()
-		if special_workspace then
-			hl.dispatch(hl.dsp.workspace.toggle_special(special_workspace))
-			hl.dispatch(hl.dsp.workspace.toggle_special("magic" .. i))
-		end
+		-- local special_workspace = hl.get_active_special_workspace()
+		-- if special_workspace then
+		-- 	-- hl.dispatch(hl.dsp.workspace.toggle_special(special_workspace))
+		-- 	hl.dispatch(hl.dsp.focus({ workspace = i }))
+		-- 	hl.dispatch(hl.dsp.workspace.toggle_special("magic" .. i))
+		-- else
 		hl.dispatch(hl.dsp.focus({ workspace = i }))
+		-- end
 	end)
 	hl.bind(mainMod .. " + SHIFT + " .. key, hl.dsp.window.move({ workspace = i }))
 end

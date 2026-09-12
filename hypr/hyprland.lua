@@ -10,7 +10,7 @@ hl.config({
 		-- gaps_out = { left = 50, right = 50, top = 0, bottom = 50 },
 		gaps_out = 0,
 
-		resize_on_border = true,
+		-- resize_on_border = true,
 		allow_tearing = false,
 		layout = "dwindle",
 		no_focus_fallback = true,

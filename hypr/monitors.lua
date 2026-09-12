@@ -10,7 +10,7 @@ hl.monitor({
 hl.monitor({
 	transform = 3,
 	disabled = false,
-	output = "HDMI-A-2",
+	output = "HDMI-A-3",
 	scale = 1,
 	mode = "1920x1080@70Hz",
 	position = "3441x-314",

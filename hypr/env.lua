@@ -16,3 +16,8 @@ hl.env("XDG_DATA_DIRS", "/usr/share:/usr/local/share")
 
 hl.env("XCURSOR_SIZE", "15")
 hl.env("HYPRCURSOR_SIZE", "15")
+
+hl.env(
+	"XDG_DATA_DIRS",
+	"/usr/share:/usr/local/share:/var/lib/flatpak/exports/share:/home/slawek/.local/share/flatpak/exports/share"
+)

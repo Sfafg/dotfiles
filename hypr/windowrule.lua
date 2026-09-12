@@ -32,6 +32,16 @@ hl.window_rule({
 	opacity = "0.1",
 })
 
+hl.window_rule({
+	match = { title = "VRendererTest" },
+	float = true,
+})
+
+hl.window_rule({
+	match = { title = "Vulkan" },
+	float = true,
+})
+
 hl.workspace_rule({
 	workspace = "1",
 	layout = "master",
@@ -42,14 +52,11 @@ hl.workspace_rule({
 hl.workspace_rule({
 	workspace = "2",
 	layout = "scrolling",
-	monitor = "HDMI-A-2",
+	monitor = "HDMI-A-3",
 	default = true,
 })
 
 for i = 3, 10 do
-	if i % 2 == 0 then
-		hl.workspace_rule({ workspace = tostring(i), monitor = "HDMI-A-2" })
-	else
-		hl.workspace_rule({ workspace = tostring(i), monitor = "DP-1" })
-	end
+	local monitor = i % 2 == 0 and "HDMI-A-3" or "DP-1"
+	hl.workspace_rule({ workspace = tostring(i), monitor = monitor })
 end
