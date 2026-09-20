@@ -12,6 +12,7 @@ Rectangle {
     property alias iconSize: icon.implicitSize
     property color iconColor: Theme.primary3
     property var onClick: null
+    property var glow: true
 
     width: buttonSize
     height: buttonSize
@@ -34,6 +35,7 @@ Rectangle {
     }
 
     Glow {
+        visible: glow
         anchors.centerIn: icon
         width: icon.implicitSize / (36 * 2)
         height: icon.implicitSize

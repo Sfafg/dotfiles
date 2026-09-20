@@ -11,6 +11,9 @@ import Quickshell.Widgets
 
 ColumnLayout {
     property alias widgetFocus: widget.focus
+    property alias moreActive: view.visible
+    property alias onMore: widget.onMore
+    property alias more: view
 
     Widget {
         id: widget
@@ -40,7 +43,6 @@ ColumnLayout {
                 if (!Wifi.isOn || Wifi.availableNetworks.length == 0)
                     return ;
 
-                view.focus = view.visible;
                 view.visible = !view.visible;
                 break;
             default:
@@ -53,11 +55,6 @@ ColumnLayout {
     ItemList {
         id: view
 
-        onFocusChanged: {
-            if (!focus)
-                visible = false;
-
-        }
         visible: false
         model: Wifi.availableNetworks
         maxShownItemCount: 3

@@ -13,6 +13,9 @@ import "./utils"
 
 ColumnLayout{
 property alias widgetFocus: widget.focus
+property alias moreActive: view.visible
+property alias onMore: widget.onMore
+property alias more: view
 Widget{
     id:widget
     iconSource: Quickshell.iconPath("network-bluetooth")
@@ -31,11 +34,12 @@ Widget{
         Bluetooth.defaultAdapter.pairable = true;
         Bluetooth.defaultAdapter.discoverable = true;
     }
+    busy:Bluetooth.defaultAdapter.discoverable
 
     Keys.onPressed: (event) => {
         switch (event.key) {
             case Navigation.down:if(!view.visible)return;view.focus=true; break
-            case Navigation.child: view.visible=!view.visible; view.focus=view.visible; break
+            case Navigation.child: view.visible=!view.visible;  break
             default: return
         }
         event.accepted = true
@@ -45,12 +49,6 @@ Widget{
 ItemList{
     id: view
 
-    onFocusChanged: {
-        if (!focus)
-            visible = false;
-
-    }
-
     visible: false
     model: ScriptModel {
         values: [...Bluetooth.devices.values]
@@ -58,7 +56,7 @@ ItemList{
         .sort((a, b) => (b.connected - a.connected) || (b.paired - a.paired) || a.name.localeCompare(b.name))
     }
 
-    maxShownItemCount: 4
+    maxShownItemCount: 6
     itemHeight: 40
 
     Keys.onPressed: (event) => {
@@ -74,7 +72,7 @@ ItemList{
     ListItem{
         RowLayout{
             anchors.verticalCenter:parent.verticalCenter
-            spacing: 10
+            spacing: 5
             Item{}
             BusyIndicator{
                 id: busy

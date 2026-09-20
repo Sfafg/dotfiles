@@ -1,15 +1,16 @@
-import Quickshell
 import "./components"
 import "./config"
 import "./services"
+import Quickshell
 
-Slider{
-    property alias sliderFocus: slider.focus
+Slider {
     id: slider
-    iconSource: value < 0.2 ? Quickshell.iconPath("brightness-low") :
-                              Quickshell.iconPath("brightness-high")
+
+    property alias sliderFocus: slider.focus
+
+    iconSource: value < 0.2 ? Quickshell.iconPath("brightness-low") : Quickshell.iconPath("brightness-high")
     value: Display.brightness
     onMoved: (v) => {
-        Display.brightness = v
+        Display.brightness = v;
     }
 }

@@ -45,7 +45,7 @@ PopupWindow {
             id: layout
 
             anchors.centerIn: parent
-            spacing: 14
+            spacing: 12
 
             WorkspaceWidget {
                 implicitWidth: parent.width
@@ -68,6 +68,10 @@ PopupWindow {
                             bluetoothWidget.widgetFocus = true;
                             break;
                         case Navigation.parent:
+                            if (networkWidget.moreActive) {
+                                networkWidget.onMore();
+                                break;
+                            }
                             window.focusGrab = false;
                             window.visible = false;
                             break;
@@ -76,6 +80,20 @@ PopupWindow {
                         }
                         event.accepted = true;
                     }
+
+                    Connections {
+                        function onVisibleChanged() {
+                            if (!window.visible) {
+                                if (networkWidget.more.focus)
+                                    networkWidget.widgetFocus = true;
+
+                                networkWidget.more.visible = false;
+                            }
+                        }
+
+                        target: window
+                    }
+
                 }
 
                 AudioWidget {
@@ -91,6 +109,10 @@ PopupWindow {
                             notifiactionDisabledWidget.widgetFocus = true;
                             break;
                         case Navigation.parent:
+                            if (audioWidget.moreActive) {
+                                audioWidget.onMore();
+                                break;
+                            }
                             window.focusGrab = false;
                             window.visible = false;
                             break;
@@ -99,6 +121,20 @@ PopupWindow {
                         }
                         event.accepted = true;
                     }
+
+                    Connections {
+                        function onVisibleChanged() {
+                            if (!window.visible) {
+                                if (audioWidget.more.focus)
+                                    audioWidget.widgetFocus = true;
+
+                                audioWidget.more.visible = false;
+                            }
+                        }
+
+                        target: window
+                    }
+
                 }
 
             }
@@ -114,6 +150,9 @@ PopupWindow {
                         switch (event.key) {
                         case Navigation.up:
                             networkWidget.widgetFocus = true;
+                            if (networkWidget.moreActive)
+                                networkWidget.more.focus = true;
+
                             break;
                         case Navigation.down:
                             displayWidget.widgetFocus = true;
@@ -122,6 +161,10 @@ PopupWindow {
                             notifiactionDisabledWidget.widgetFocus = true;
                             break;
                         case Navigation.parent:
+                            if (bluetoothWidget.moreActive) {
+                                bluetoothWidget.onMore();
+                                break;
+                            }
                             window.focusGrab = false;
                             window.visible = false;
                             break;
@@ -130,6 +173,20 @@ PopupWindow {
                         }
                         event.accepted = true;
                     }
+
+                    Connections {
+                        function onVisibleChanged() {
+                            if (!window.visible) {
+                                if (bluetoothWidget.more.focus)
+                                    bluetoothWidget.widgetFocus = true;
+
+                                bluetoothWidget.more.visible = false;
+                            }
+                        }
+
+                        target: window
+                    }
+
                 }
 
                 NotificationDisabledWidget {
@@ -146,6 +203,9 @@ PopupWindow {
                             break;
                         case Navigation.up:
                             audioWidget.widgetFocus = true;
+                            if (audioWidget.moreActive)
+                                audioWidget.more.focus = true;
+
                             break;
                         case Navigation.parent:
                             window.focusGrab = false;
@@ -175,6 +235,9 @@ PopupWindow {
                         switch (event.key) {
                         case Navigation.up:
                             bluetoothWidget.widgetFocus = true;
+                            if (bluetoothWidget.moreActive)
+                                bluetoothWidget.more.focus = true;
+
                             break;
                         case Navigation.down:
                             volumeSlider.sliderFocus = true;
@@ -186,6 +249,10 @@ PopupWindow {
                             dispPosWidget.visible = true;
                             break;
                         case Navigation.parent:
+                            if (dispPosWidget.moreActive) {
+                                dispPosWidget.onMore();
+                                break;
+                            }
                             if (!dispPosWidget.visible) {
                                 window.focusGrab = false;
                                 window.visible = false;
@@ -197,6 +264,20 @@ PopupWindow {
                         }
                         event.accepted = true;
                     }
+
+                    Connections {
+                        function onVisibleChanged() {
+                            if (!window.visible) {
+                                if (displayWidget.more.focus)
+                                    displayWidget.widgetFocus = true;
+
+                                dispPosWidget.visible = false;
+                            }
+                        }
+
+                        target: window
+                    }
+
                 }
 
                 SearchWidget {
@@ -260,6 +341,11 @@ PopupWindow {
                 id: dispPosWidget
 
                 visible: false
+                onFocusChanged: {
+                    if (focus)
+                        displayWidget.focus = true;
+
+                }
             }
 
             VolumeSlider {

@@ -1,17 +1,18 @@
 hl.monitor({
-	transform = 0,
-	disabled = false,
-	output = "DP-1",
-	scale = 1,
-	mode = "3440x1440@120Hz",
-	position = "0x0",
+ disabled = false,
+ mode = "3440x1440@180",
+ output = "DP-1",
+ position = "0x0",
+ scale = 1,
+ transform = 0,
 })
 
 hl.monitor({
-	transform = 3,
-	disabled = false,
-	output = "HDMI-A-3",
-	scale = 1,
-	mode = "1920x1080@70Hz",
-	position = "3441x-314",
+ disabled = false,
+ mode = "1920x1080@70",
+ output = "HDMI-A-2",
+ position = "3440x-415",
+ scale = 1,
+ transform = 3,
 })
+

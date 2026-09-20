@@ -42,6 +42,13 @@ hl.window_rule({
 	float = true,
 })
 
+hl.window_rule({
+	match = { title = "bwtimer" },
+	float = true,
+	pin = true,
+	move = { "monitor_w -window_w ", "0" },
+})
+
 hl.workspace_rule({
 	workspace = "1",
 	layout = "master",
@@ -52,11 +59,11 @@ hl.workspace_rule({
 hl.workspace_rule({
 	workspace = "2",
 	layout = "scrolling",
-	monitor = "HDMI-A-3",
+	monitor = "HDMI-A-2",
 	default = true,
 })
 
 for i = 3, 10 do
-	local monitor = i % 2 == 0 and "HDMI-A-3" or "DP-1"
+	local monitor = i % 2 == 0 and "HDMI-A-2" or "DP-1"
 	hl.workspace_rule({ workspace = tostring(i), monitor = monitor })
 end

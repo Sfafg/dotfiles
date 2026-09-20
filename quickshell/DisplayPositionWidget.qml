@@ -1,121 +1,261 @@
-import Quickshell
-import Quickshell.Widgets
-import QtQuick
-import QtQuick.Layouts
 import "./components"
 import "./config"
 import "./services"
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import Quickshell
+import Quickshell.Widgets
 
-ClippingRectangle{
+ClippingRectangle {
     id: root
-    property real minX: Math.min(...Display.monitors.map(m => m.x))
-    property real minY: Math.min(...Display.monitors.map(m => m.y))
-    property real maxX: Math.max(...Display.monitors.map(m => m.x+m.width))
-    property real maxY: Math.max(...Display.monitors.map(m => m.y+m.height))
-    property real scale: width / (maxX-minX) * 0.85
 
-    Layout.fillWidth:true
-    implicitHeight: width * (maxY-minY)/(maxX-minX)
+    property real minX: Math.min.apply(null, Display.monitors.map((m) => {
+        return m.x;
+    }))
+    property real minY: Math.min.apply(null, Display.monitors.map((m) => {
+        return m.y;
+    }))
+    property real maxX: Math.max.apply(null, Display.monitors.map((m) => {
+        return m.x + m.displayWidth;
+    }))
+    property real maxY: Math.max.apply(null, Display.monitors.map((m) => {
+        return m.y + m.displayHeight;
+    }))
+    property real scale: width / (maxX - minX) * 0.87
+
+    Layout.fillWidth: true
+    implicitHeight: width * (maxY - minY) / (maxX - minX)
     radius: 10
     color: Theme.primary4
 
-    Repeater{
+    Repeater {
         model: Display.monitors
 
-        Rectangle{
-            radius:10
-            x: modelData.x*root.scale +(root.width-(maxX+minX)*root.scale)/2
-            y: modelData.y*root.scale +(root.height-(maxY+minY)*root.scale)/2
-            width: modelData.width*root.scale
-            height: modelData.height*root.scale
-            color: Theme.primary2
-            border.width: 2
-            border.color: Theme.accent
-
+        Rectangle {
             property point dragStart
+
+            radius: 10
+            x: modelData.x * root.scale + (root.width - (maxX + minX) * root.scale) / 2
+            y: modelData.y * root.scale + (root.height - (maxY + minY) * root.scale) / 2
+            width: modelData.displayWidth * root.scale
+            height: modelData.displayHeight * root.scale
+            color: modelData.disabled ? Theme.primary3 : Theme.primary2_5
+            border.width: 2
+            border.color: modelData.disabled ? Theme.accent2 : Theme.accent
 
             MouseArea {
                 anchors.fill: parent
                 cursorShape: Qt.PointingHandCursor
-
                 onPressed: (mouse) => {
-                    parent.dragStart = Qt.point(mouse.x, mouse.y)
+                    parent.dragStart = Qt.point(mouse.x, mouse.y);
                 }
-
                 onPositionChanged: (mouse) => {
                     if (pressed) {
-                        modelData.x += mouse.x - parent.dragStart.x
-                        modelData.y += mouse.y - parent.dragStart.y
+                        modelData.x += mouse.x - parent.dragStart.x;
+                        modelData.y += mouse.y - parent.dragStart.y;
                     }
                 }
-
-                onReleased: (mouse)=>{
-                    let monitors = Display.monitors.slice()
-                    // if(Math.abs(mouse.x - parent.dragStart.x) + Math.abs(mouse.y - parent.dragStart.y) < 2)
-                    // {
-                    //     for (let i = 0; i < monitors.length; i++) {
-                    //         if (monitors[i].id === modelData.id)
-                    //         {
-                    //             monitors[i] = modelData
-                    //         }
-                    //     }
-                    // }
-
-                    let minx = Display.monitors[0].x
-                    let miny = Display.monitors[0].y
-                    for(const monitor of monitors){
-                        if(monitor.id === modelData.id) continue
-                        let xDist1 = modelData.x - monitor.x - monitor.width 
-                        let xDist2 = modelData.x + modelData.width - monitor.x 
-                        let xDist = Math.abs(xDist1) < Math.abs(xDist2) ? xDist1 : xDist2 
-
-                        let yDist1 = modelData.y - monitor.y - monitor.height 
-                        let yDist2 = modelData.y + modelData.height - monitor.y 
-                        let yDist = Math.abs(yDist1) < Math.abs(yDist2) ? yDist1 : yDist2 
-
-                        if(Math.abs(xDist) < Math.abs(yDist))
-                            modelData.x -= xDist - (Math.abs(xDist1) < Math.abs(xDist2) ? 1: -1)
-                        else
-                            modelData.y -= yDist - (Math.abs(yDist1) < Math.abs(yDist2) ? 1: -1)
-
-
-                        minx = Math.min(monitor.x, minx)
-                        miny = Math.min(monitor.y, miny)
+                onReleased: (mouse) => {
+                    let monitors = Display.monitors.slice();
+                    for (let monitor of monitors) {
+                        if (monitor.output == modelData.output) {
+                            monitor.x = Math.round(modelData.x);
+                            monitor.y = Math.round(modelData.y);
+                            break;
+                        }
                     }
-
-                    for (let i = 0; i < monitors.length; i++) {
-                        if (monitors[i].id === modelData.id)
-                            monitors[i] = modelData
-                        
-                        monitors[i].x -= minx
-                        monitors[i].y -= miny
-                        monitors[i].x = Math.round(monitors[i].x)
-                        monitors[i].y = Math.round(monitors[i].y)
+                    for (let monitor of monitors) {
+                        monitor.x -= monitors[0].x;
+                        monitor.y -= monitors[0].y;
                     }
+                    for (let steps = 0; steps < 4; steps++) {
+                        let noCollisons = true;
+                        for (let monitorA of monitors) {
+                            for (let monitorB of monitors) {
+                                if (monitorA.output == monitorB.output)
+                                    continue;
 
-                    Display.prefferedMonitors = monitors
+                                let xDepth1 = monitorB.x - (monitorA.x + monitorA.displayWidth);
+                                let xDepth2 = monitorA.x - (monitorB.x + monitorB.displayWidth);
+                                let yDepth1 = monitorA.y - (monitorB.y + monitorB.displayHeight);
+                                let yDepth2 = monitorB.y - (monitorA.y + monitorA.displayHeight);
+                                if (!(xDepth1 < 0 && xDepth2 < 0) || !(yDepth1 < 0 && yDepth2 < 0))
+                                    continue;
+
+                                noCollisons = false;
+                                let xDepth = Math.abs(xDepth1) < Math.abs(xDepth2) ? xDepth1 : -xDepth2;
+                                let yDepth = Math.abs(yDepth1) < Math.abs(yDepth2) ? -yDepth1 : yDepth2;
+                                if (Math.abs(xDepth) < Math.abs(yDepth))
+                                    monitorB.x = Math.round(monitorB.x - xDepth);
+                                else
+                                    monitorB.y = Math.round(monitorB.y - yDepth);
+                            }
+                        }
+                        if (noCollisons)
+                            break;
+
+                    }
+                    Display.prefferedMonitors = monitors;
+                    Display.monitors = monitors;
                 }
             }
-            ColumnLayout{
+
+            ColumnLayout {
                 anchors.centerIn: parent
-                rotation: [1,3,5,7].includes(modelData.transform) ? 90:0
-                Text{
+                spacing: 0
+                rotation: [1, 3, 5, 7].includes(modelData.transform) ? 90 : 0
+
+                Text {
                     Layout.alignment: Qt.AlignHCenter
-                    text: modelData.name
-                    color: Theme.text
+                    text: modelData.output
+                    color: modelData.disabled ? Theme.text1 : Theme.text
                     font.pixelSize: Fnt.fontSize2
                     font.family: Fnt.fontFamily
                     font.bold: true
                 }
 
-                Text{
+                TextField {
                     id: modeText
-                    text: `${modelData.width}x${modelData.height}\n${modelData.refreshRate}Hz`
-                    color: Theme.text1
+
+                    leftPadding: 10
+                    rightPadding: 10
+                    text: modelData.mode
+                    color: modelData.disabled ? Theme.textSecondary : Theme.text1
                     font.pixelSize: Fnt.fontSize3
                     font.family: Fnt.fontFamily
+                    onAccepted: {
+                        for (let monitor of Display.monitors) {
+                            if (monitor.output == modelData.output) {
+                                monitor.mode = text;
+                                break;
+                            }
+                        }
+                        Display.monitors = Display.monitors.slice();
+                        Display.prefferedMonitors = Display.monitors;
+                        focus = false;
+                        root.focus = true;
+                    }
+                    Keys.onPressed: (event) => {
+                        switch (event.key) {
+                        case Navigation.parent:
+                            text = modelData.mode;
+                            focus = false;
+                            root.focus = true;
+                            break;
+                        default:
+                            return ;
+                        }
+                        event.accepted = true;
+                    }
+
+                    validator: RegularExpressionValidator {
+                        regularExpression: /^\d+x\d+@\d+$/
+                    }
+
+                    background: Rectangle {
+                        radius: 3
+                        color: "transparent"
+                        border.width: 1
+                        border.color: Theme.selectedBorder
+                        opacity: 0.1
+                    }
+
                 }
+
             }
+
+            Item {
+                rotation: [1, 3, 5, 7].includes(modelData.transform) ? 90 : 0
+                anchors.centerIn: parent
+                width: modelData.width * root.scale
+                height: modelData.height * root.scale
+
+                Button {
+                    id: turnOff
+
+                    onClick: function() {
+                        for (let monitor of Display.monitors) {
+                            if (monitor.output == modelData.output) {
+                                monitor.disabled = !monitor.disabled;
+                                break;
+                            }
+                        }
+                        Display.monitors = Display.monitors.slice();
+                        Display.prefferedMonitors = Display.monitors;
+                    }
+                    anchors.top: parent.top
+                    anchors.right: parent.right
+                    anchors.margins: 6
+                    focus: false
+                    color: "transparent"
+                    buttonSize: 24
+                    iconSize: 24
+                    iconSource: Quickshell.iconPath("system-shutdown")
+                    iconColor: Theme.accent
+                    glow: false
+                }
+
+                Button {
+                    id: rotateButton
+
+                    onClick: function() {
+                        for (let monitor of Display.monitors) {
+                            if (monitor.output == modelData.output) {
+                                let isFlipped = monitor.transform >= 4;
+                                monitor.transform = (monitor.transform + 1) % 4 + isFlipped * 4;
+                                [monitor.displayWidth, monitor.displayHeight] = [monitor.displayHeight, monitor.displayWidth];
+                                break;
+                            }
+                        }
+                        Display.monitors = Display.monitors.slice();
+                        Display.prefferedMonitors = Display.monitors;
+                    }
+                    anchors.top: parent.top
+                    anchors.right: turnOff.left
+                    anchors.margins: 6
+                    anchors.rightMargin: 0
+                    focus: false
+                    color: "transparent"
+                    buttonSize: 24
+                    iconSize: 24
+                    iconSource: Quickshell.iconPath("circular-arrow-shape")
+                    iconColor: Theme.accent
+                    glow: false
+                }
+
+                Button {
+                    id: mirrorButton
+
+                    onClick: function() {
+                        for (let monitor of Display.monitors) {
+                            if (monitor.output == modelData.output) {
+                                let isFlipped = monitor.transform >= 4;
+                                isFlipped = !isFlipped;
+                                monitor.transform = monitor.transform % 4 + isFlipped * 4;
+                                break;
+                            }
+                        }
+                        Display.monitors = Display.monitors.slice();
+                        Display.prefferedMonitors = Display.monitors;
+                    }
+                    anchors.top: parent.top
+                    anchors.right: rotateButton.left
+                    anchors.margins: 6
+                    anchors.rightMargin: 0
+                    focus: false
+                    color: "transparent"
+                    buttonSize: 24
+                    iconSize: 24
+                    iconSource: Quickshell.iconPath("osd-rotate-flip")
+                    iconColor: Theme.accent
+                    glow: false
+                }
+
+            }
+
         }
+
     }
+
 }

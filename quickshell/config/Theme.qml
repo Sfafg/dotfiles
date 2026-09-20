@@ -10,6 +10,7 @@ Singleton {
     property color primary: Qt.hsva(0, 0, 0.8, 1)
     property color primary1: Qt.hsva(0, 0, 0.5, 1)
     property color primary2: Qt.hsva(0, 0, 0.3, 1)
+    property color primary2_5: Qt.hsva(0, 0, 0.2, 1)
     property color primary3: Qt.hsva(0, 0, 0.1, 1)
     property color primary4: Qt.hsva(0, 0, 0.08, 1)
     property color accent: {

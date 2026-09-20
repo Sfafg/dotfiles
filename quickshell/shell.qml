@@ -5,6 +5,9 @@ import Quickshell.Wayland
 
 Scope {
     ShowBar {
+        Component.onCompleted: {
+            console.lod(Display.monitors.length);
+        }
     }
 
     Bar {
