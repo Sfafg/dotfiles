@@ -35,14 +35,15 @@ QtObject {
             }
             previousRow = currentRow;
         }
-        return previousRow[previousRow.length - 1] / a.length / b.length;
+        const distance = previousRow[b.length];
+        return distance / Math.max(a.length, b.length);
     }
 
     function score(app, query){
         const prefixBonus = app.name.toLowerCase().startsWith(query.toLowerCase()) ? 100 : 0;
         let lDist = Utils.levenshtein(app.name.toLowerCase(),query.toLowerCase()); 
         let usage = AppUsage.usage?.[app.name] ?? 0
-        return 20 / (lDist+1) + Math.log(usage+1)*0.5 + prefixBonus
+        return 20 / (lDist+1) + Math.log(usage+1)*0.6 + prefixBonus*100
     }
 
     function run(app){
